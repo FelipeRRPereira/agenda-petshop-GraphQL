@@ -1,36 +1,36 @@
 const executaQuery = require('../database/queries')
 
 class Cliente {
-  lista(res) {
+  lista() {
     const sql = 'SELECT * FROM Clientes'
 
-    executaQuery(res, sql)
+    return executaQuery(sql)
   }
 
-  buscaPorId(res, id) {
+  buscaPorId(id) {
     const sql = `SELECT * FROM Clientes WHERE id=${id}`
 
-    executaQuery(res, sql)
+    return executaQuery(sql)
   }
 
-  adiciona(res, item) {
+  adiciona(item) {
     const { nome, cpf } = item
     const sql = `INSERT INTO Clientes(nome, CPF) VALUES('${nome}', '${cpf}')`
 
-    executaQuery(res, sql)
+    return executaQuery(sql)
   }
 
-  atualiza(res, novoItem, id) {
+  atualiza(novoItem, id) {
     const { nome, cpf } = novoItem
     const sql = `UPDATE Clientes SET nome='${nome}', CPF='${cpf}' WHERE id=${id}`
 
-    executaQuery(res, sql)
+    return executaQuery(sql)
   }
 
-  deleta(res, id) {
+  deleta(id) {
     const sql = `DELETE FROM Clientes WHERE id=${id}`
 
-    executaQuery(res, sql)
+    return executaQuery(sql)
   }
 }
 
