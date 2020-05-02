@@ -1,6 +1,7 @@
 const { GraphQLServer } = require('graphql-yoga')
 const conexao = require('./infraestrutura/conexao')
 const Tabelas = require('./infraestrutura/database/tabelas')
+const Operations = require('./infraestrutura/operations')
 
 conexao.connect(erro => {
   if (erro) {
@@ -11,9 +12,15 @@ conexao.connect(erro => {
 
   Tabelas.init(conexao)
 })
+
+const Clientes = new Operations('cliente')
 const resolvers = {
   Query: {
-    status: () => 'Servidor rodando!'
+    status: () => 'Servidor rodando!',
+    clientes: () => Clientes.lista()
+  },
+  Mutation: {
+    adicionarCliente: (root, params) => (Clientes.adiciona(params))
   }
 }
 
