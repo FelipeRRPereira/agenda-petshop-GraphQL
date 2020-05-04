@@ -2,15 +2,66 @@ const executaQuery = require("../database/queries");
 
 class Pet {
   lista() {
-    const sql = "SELECT * FROM Pets";
+    const sql = `
+      SELECT 
+          Pets.id,
+          Pets.nome,
+          Pets.tipo,
+          Pets.observacoes,
+          Clientes.id as donoId,
+          Clientes.nome as donoNome,
+          Clientes.cpf as donoCpf
+      FROM
+          Pets
+              INNER JOIN
+          Clientes
+      WHERE
+          Pets.donoId =Clientes.id`;
 
-    return executaQuery(sql);
+    return executaQuery(sql).then((pets) => 
+      pets.map((pet) => ({
+        id: pet.id,
+        nome: pet.nome,
+        tipo: pet.tipo,
+        observacoes: pet.observacoes,
+        dono: {
+          id: pet.donoId,
+          nome: pet.donoNome,
+          cpf: pet.donoCpf,
+        }
+      }))
+    );
   }
 
   buscaPorId(id) {
-    const sql = `SELECT * FROM Pets WHERE id=${parseInt(id)}`;
+    const sql = `
+      SELECT 
+          Pets.id,
+          Pets.nome,
+          Pets.tipo,
+          Pets.observacoes,
+          Clientes.id as donoId,
+          Clientes.nome as donoNome,
+          Clientes.cpf as donoCpf
+      FROM
+          Pets
+              INNER JOIN
+          Clientes
+      WHERE
+          Pets.donoId =Clientes.id 
+      AND id=${parseInt(id)}`;
 
-    return executaQuery(sql).then((resposta) => resposta[0]);
+    return executaQuery(sql).then((pet) => ({
+      id: pet[0].id,
+      nome: pet[0].nome,
+      tipo: pet[0].tipo,
+      observacoes: pet[0].observacoes,
+      dono: {
+        id: pet[0].donoId,
+        nome: pet[0].donoNome,
+        cpf: pet[0].donoCpf,
+      },
+    }));
   }
 
   adiciona(item) {
@@ -23,7 +74,7 @@ class Pet {
       nome,
       donoId,
       tipo,
-      observacoes
+      observacoes,
     }));
   }
 
