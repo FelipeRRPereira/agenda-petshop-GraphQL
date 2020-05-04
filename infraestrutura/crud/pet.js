@@ -1,16 +1,16 @@
 const executaQuery = require("../database/queries");
 
 class Pet {
-  lista(res) {
+  lista() {
     const sql = "SELECT * FROM Pets";
 
-    executaQuery(res, sql);
+    return executaQuery(sql);
   }
 
-  buscaPorId(res, id) {
+  buscaPorId(id) {
     const sql = `SELECT * FROM Pets WHERE id=${parseInt(id)}`;
 
-    executaQuery(res, sql);
+    return executaQuery(sql).then((resposta) => resposta[0]);
   }
 
   adiciona(item) {
