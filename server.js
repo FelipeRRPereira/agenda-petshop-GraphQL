@@ -17,9 +17,13 @@ const Clientes = new Operations('cliente')
 const Pets = new Operations('pet')
 const resolvers = {
   Query: {
+    // Cliente
     status: () => 'Servidor rodando!',
     clientes: () => Clientes.lista(),
-    cliente: (root, {id}) => Clientes.buscaPorId(id)
+    cliente: (root, {id}) => Clientes.buscaPorId(id),
+    // Pet
+    pets: () => Pets.lista(),
+    pet: (root, {id}) => Pets.buscaPorId(id)
   },
   Mutation: {
     // Cliente
