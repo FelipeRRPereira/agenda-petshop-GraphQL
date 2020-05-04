@@ -48,18 +48,18 @@ class Pet {
               INNER JOIN
           Clientes
       WHERE
-          Pets.donoId =Clientes.id 
-      AND id=${parseInt(id)}`;
+          Pets.donoId = Clientes.id 
+      AND Pets.id = ${parseInt(id)}`;
 
-    return executaQuery(sql).then((pet) => ({
-      id: pet[0].id,
-      nome: pet[0].nome,
-      tipo: pet[0].tipo,
-      observacoes: pet[0].observacoes,
+    return executaQuery(sql).then(pets => ({
+      id: pets[0].id,
+      nome: pets[0].nome,
+      tipo: pets[0].tipo,
+      observacoes: pets[0].observacoes,
       dono: {
-        id: pet[0].donoId,
-        nome: pet[0].donoNome,
-        cpf: pet[0].donoCpf,
+        id: pets[0].donoId,
+        nome: pets[0].donoNome,
+        cpf: pets[0].donoCpf,
       },
     }));
   }
