@@ -27,7 +27,11 @@ type Mutation {
 }
 
 type Query {
+  # Cliente
   status: String!
   clientes: [Cliente!]!
   cliente(id: ID): Cliente!
+  # Pet
+  pets: [Pet!]!
+  pet(id: ID): Pet!
 }
