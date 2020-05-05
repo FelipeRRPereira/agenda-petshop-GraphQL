@@ -58,10 +58,62 @@ class Atendimento {
     });
   }
 
-  buscaPorId(res, id) {
-    const sql = `SELECT * FROM Atendimentos WHERE id=${parseInt(id)}`;
+  buscaPorId(id) {
+    const sql = `SELECT 
+                    Atendimentos.id,
+                    Atendimentos.data,
+                    Atendimentos.dataCriacao,
+                    Atendimentos.status,
+                    Atendimentos.observacoes,
+                    Clientes.id AS clienteId,
+                    Clientes.nome AS clienteNome,
+                    Clientes.cpf AS clienteCpf,
+                    Pets.id AS petId,
+                    Pets.nome AS petNome,
+                    Pets.tipo AS petTipo,
+                    Pets.observacoes AS petObservacoes,
+                    Servicos.id AS servicoId,
+                    Servicos.nome AS servicoNome,
+                    Servicos.preco AS servicoPreco,
+                    Servicos.descricao AS servicoDescricao
+                FROM
+                    atendimentos AS Atendimentos
+                        INNER JOIN Clientes
+                        INNER JOIN Pets
+                        INNER JOIN Servicos
+                WHERE
+                    Atendimentos.cliente = Clientes.id
+                        AND Atendimentos.pet = Pets.id
+                        AND Atendimentos.servico = Servicos.id
+                        AND Atendimentos.id = ${parseInt(id)}`;
 
-    executaQuery(res, sql);
+    return executaQuery(sql).then((atendimentos) => {
+      const atendimento = atendimentos[0];
+      return {
+        id: atendimento.id,
+        data: atendimento.data,
+        dataCriacao: atendimento.dataCriacao,
+        status: atendimento.status,
+        observacoes: atendimento.observacoes,
+        cliente: {
+          id: atendimento.clienteId,
+          nome: atendimento.clienteNome,
+          cpf: atendimento.clienteCpf,
+        },
+        pet: {
+          id: atendimento.petId,
+          nome: atendimento.petNome,
+          tipo: atendimento.petTipo,
+          observacoes: atendimento.petObservacoes,
+        },
+        servico: {
+          id: atendimento.servicoId,
+          nome: atendimento.servicoNome,
+          preco: atendimento.servicoPreco,
+          descricao: atendimento.servicoDescricao,
+        },
+      };
+    });
   }
 
   adiciona(item) {
