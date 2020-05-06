@@ -33,8 +33,10 @@ class Atendimento {
     return executaQuery(sql).then((atendimentos) => {
       return atendimentos.map((atendimento) => ({
         id: atendimento.id,
-        data: atendimento.data,
-        dataCriacao: atendimento.dataCriacao,
+        data: moment(atendimento.data).format("YYYY-MM-DD HH:mm:ss"),
+        dataCriacao: moment(atendimento.dataCriacao).format(
+          "YYYY-MM-DD HH:mm:ss"
+        ),
         status: atendimento.status,
         observacoes: atendimento.observacoes,
         cliente: {
@@ -91,8 +93,10 @@ class Atendimento {
       const atendimento = atendimentos[0];
       return {
         id: atendimento.id,
-        data: atendimento.data,
-        dataCriacao: atendimento.dataCriacao,
+        data: moment(atendimento.data).format("YYYY-MM-DD HH:mm:ss"),
+        dataCriacao: moment(atendimento.dataCriacao).format(
+          "YYYY-MM-DD HH:mm:ss"
+        ),
         status: atendimento.status,
         observacoes: atendimento.observacoes,
         cliente: {
@@ -145,13 +149,40 @@ class Atendimento {
     });
   }
 
-  atualiza(res, novoItem, id) {
-    const { cliente, pet, servico, status, observacoes } = item;
-    const data = new Date.toLocaleDateString();
+  atualiza(novoItem) {
+    const {
+      id,
+      clienteId,
+      petId,
+      servicoId,
+      data,
+      status,
+      observacoes,
+    } = novoItem;
+    const dataFormatada = moment(data, "DD/MM/YYYY").format(
+      "YYYY-MM-DD HH:mm:ss"
+    );
 
-    const sql = `UPDATE Atendimentos SET clienteId=${cliente}, petId=${pet}, servicoId=${servico}, data='${data}', status='${status}' observacoes='${observacoes}' WHERE id=${id}`;
+    const sql = `UPDATE Atendimentos SET cliente=${clienteId}, pet=${petId}, servico=${servicoId}, data='${dataFormatada}', status='${status}', observacoes='${observacoes}' WHERE id=${id};
+      SELECT * FROM Clientes WHERE Clientes.id = ${clienteId}; 
+      SELECT * FROM Pets WHERE Pets.id = ${petId};
+      SELECT * FROM Servicos WHERE Servicos.id = ${servicoId}`;
 
-    executaQuery(res, sql);
+    return executaQuery(sql).then((dados) => {
+      const cliente = dados[1][0];
+      const pet = dados[2][0];
+      const servico = dados[3][0];
+      return {
+        id,
+        cliente,
+        pet,
+        servico,
+        data: dataFormatada,
+        dataCriacao: null,
+        status,
+        observacoes,
+      };
+    });
   }
 
   deleta(res, id) {
