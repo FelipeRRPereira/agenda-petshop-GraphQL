@@ -27,6 +27,7 @@ type Mutation {
     status: String
     observacoes: String
   ): Atendimento!
+  deletarAtendimento(id: ID!): ID!
 }
 
 type Query {
