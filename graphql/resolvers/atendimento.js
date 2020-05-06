@@ -8,6 +8,7 @@ const resolvers = {
   },
   Mutation: {
     adicionarAtendimento: (root, params) => Atendimentos.adiciona(params),
+    atualizarAtendimento: (root, params) => Atendimentos.atualiza(params),
   },
 };
 
