@@ -18,6 +18,15 @@ type Mutation {
     status: String
     observacoes: String
   ): Atendimento!
+  atualizarAtendimento(
+    id: ID!
+    clienteId: Int!
+    petId: Int!
+    servicoId: Int!
+    data: String!
+    status: String
+    observacoes: String
+  ): Atendimento!
 }
 
 type Query {
